@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import * as ChatActions from './store/actions/chatActions'
 import Auth from './components/pages/Auth'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App ({ setupSocket, socket }) {
   useEffect(() => {
@@ -10,33 +11,21 @@ function App ({ setupSocket, socket }) {
   }, [])
   return (
     <div className='App'>
-      {console.log('socket: ', socket)}
-      <button onClick={e => {
-        e.preventDefault()
-        if(socket) {
-          socket.send(JSON.stringify(
-            {
-              type: 'Hello',
-              data: 'world'
-            }
-          ))
-        }
-      }}>Send Msg</button>
       <BrowserRouter>
         <Switch>
           <Route
             path='/login'
-            render={Auth}
+            component={Auth}
           />
           <Route
             path='/signup'
-            render={Auth}
+            component={Auth}
           />
           <Route
             path='/'
             render={props => {
               console.log('props: ', props);
-              if (!this.props.token) {
+              if (!props.token) {
                 return (
                   <Redirect to='/login' />
                 )
