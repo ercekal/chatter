@@ -1,15 +1,27 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 function Signup({socket}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [userInput, setUserInput] = useReducer(
+    (state, newState) => ({...state, ...newState}),
+    {
+    email: '',
+    password: '',
+    passwordAgain: '',
+    name: '',
+    username: ''
+    }
+  );
+  const handleChange = evt => {
+    const name = evt.target.name;
+    const newValue = evt.target.value;
+    setUserInput({[name]: newValue});
+  }
   return (
     <div className='container'>
       <div className='row'>
-        <div className='col-md-12'>
+        <div className='col-md-6'>
           <div className='form-wrapper'>
             <h3>Signup</h3>
             <p>Already have an account? <Link to='/login'>Login</Link> </p>
@@ -20,8 +32,8 @@ function Signup({socket}) {
                   socket.send(JSON.stringify({
                     type: 'SIGNUP',
                     data: {
-                      email,
-                      password
+                      email: userInput.email,
+                      password: userInput.password
                     }
                   }))
                 }
@@ -33,9 +45,10 @@ function Signup({socket}) {
                 <label>Email</label>
                 <input
                   type='email'
+                  name='email'
                   className='form-control'
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  value={userInput.email}
+                  onChange={handleChange}
                   placeholder='Email' />
               </div>
               <div className='form-group'>
@@ -43,9 +56,39 @@ function Signup({socket}) {
                 <input
                   type='password'
                   className='form-control'
-                  onChange={e => setPassword(e.target.value)}
-                  value={password}
+                  onChange={handleChange}
+                  value={userInput.password}
                   placeholder='Password' />
+              </div>
+              <div className='form-group'>
+                <label>Confirm Password</label>
+                <input
+                  type='password'
+                  name='passwordAgain'
+                  className='form-control'
+                  onChange={handleChange}
+                  value={userInput.passwordAgain}
+                  placeholder='Confirm Password' />
+              </div>
+              <div className='form-group'>
+                <label>Name</label>
+                <input
+                  type='text'
+                  name='name'
+                  className='form-control'
+                  onChange={handleChange}
+                  value={userInput.name}
+                  placeholder='Name' />
+              </div>
+              <div className='form-group'>
+                <label>Username</label>
+                <input
+                  type='text'
+                  name='username'
+                  className='form-control'
+                  onChange={handleChange}
+                  value={userInput.username}
+                  placeholder='Username' />
               </div>
               <button className='btn btn-primary' type='submit'>
                 Sign Up
