@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import * as ChatActions from './store/actions/chatActions'
 import Auth from './components/pages/Auth'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/css/swag.css'
 
 function App ({ setupSocket, socket }) {
   useEffect(() => {
