@@ -63,13 +63,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  console.log('state: ', state);
-  return {
-    auth: state.auth,
-    chat: state.chat,
-  }
-}
+const mapStateToProps = state => ({
+  auth: state.auth,
+  chat: state.chat,
+})
 
 const mapDispatchToProps = dispatch => ({
   setupSocket: () => {

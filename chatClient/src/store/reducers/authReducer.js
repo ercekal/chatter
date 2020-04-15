@@ -11,7 +11,7 @@ const auth = (state = defaultState, action) => {
         token: action.payload.data.session.id,
         user: action.payload.data.user
       }
-    case 'LOGGEDIN':
+    case 'LOGGEDOUT':
       return {
         ...state,
         ...defaultState
