@@ -39,11 +39,14 @@ function Signup({socket}) {
                     if (empty > 0) setError('All fields required')
                     if (userInput.password !== userInput.passwordAgain) setError('Passwords must match')
                     if (empty === 0) {
+                      setError('')
                       socket.send(JSON.stringify({
                         type: 'SIGNUP',
                         data: {
                           email: userInput.email,
-                          password: userInput.password
+                          password: userInput.password,
+                          name: userInput.name,
+                          username: userInput.username,
                         }
                       }))
                     }
@@ -51,6 +54,7 @@ function Signup({socket}) {
                 }}
                 >
               <p>Already have an account? <Link to='/login'>Login</Link> </p>
+              {error !== '' && <p className='text-danger'>{error}</p>}
               <div className='row'>
                 <div className='col-md-6'>
                  <div className='form-group'>
@@ -97,6 +101,7 @@ function Signup({socket}) {
                     <label>Password</label>
                     <input
                       type='password'
+                      name='password'
                       className='form-control'
                       onChange={handleChange}
                       value={userInput.password}
