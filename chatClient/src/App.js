@@ -7,60 +7,57 @@ import Auth from './components/pages/Auth'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/css/swag.css'
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount() {
-    this.props.setupSocket()
-  }
-  render() {
-    return (
-      <div className='App'>
-        <button onClick={e => this.props.logout()}>
-          Log out
-        </button>
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path='/login'
-              render={props => {
-                if(this.props.auth.token) {
-                  return <Redirect to='/' />
-                } else {
-                  return <Auth />
-                }
-              }}
-            />
-            <Route
-              path='/signup'
-              render={props => {
-                if(this.props.auth.token) {
-                  return <Redirect to='/' />
-                } else {
-                  return <Auth />
-                }
-              }}
-            />
-            <Route
-              path='/'
-              render={props => {
-                if (!this.props.auth.token) {
-                  return (
-                    <Redirect to='/login' />
-                  )
-                } else {
-                  return (
-                    <h1>Root</h1>
-                  )
-                }
-              }}
-            />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    )
-  }
+const App = ({logout, auth, setupSocket, chat}) => {
+
+  useEffect(() => {
+    setupSocket()
+  }, []);
+
+  return (
+    <div className='App'>
+      <button onClick={e => logout()}>
+        Log out
+      </button>
+      <BrowserRouter>
+        <Switch>
+          <Route
+            path='/login'
+            render={props => {
+              if(auth.token) {
+                return <Redirect to='/' />
+              } else {
+                return <Auth />
+              }
+            }}
+          />
+          <Route
+            path='/signup'
+            render={props => {
+              if(auth.token) {
+                return <Redirect to='/' />
+              } else {
+                return <Auth />
+              }
+            }}
+          />
+          <Route
+            path='/'
+            render={props => {
+              if (!auth.token) {
+                return (
+                  <Redirect to='/login' />
+                )
+              } else {
+                return (
+                  <h1>Root</h1>
+                )
+              }
+            }}
+          />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  )
 }
 
 const mapStateToProps = state => ({
