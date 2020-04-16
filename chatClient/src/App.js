@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import * as ChatActions from './store/actions/chatActions'
 import * as AuthActions from './store/actions/authActions'
 import Auth from './components/pages/Auth'
+import Messenger from './components/pages/Messenger'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/css/swag.css'
 
@@ -41,6 +42,20 @@ const App = ({logout, auth, setupSocket, chat}) => {
             }}
           />
           <Route
+            path='/:threadId'
+            render={props => {
+              if (!auth.token) {
+                return (
+                  <Redirect to='/login' />
+                )
+              } else {
+                return (
+                  <Messenger />
+                )
+              }
+            }}
+          />
+          <Route
             path='/'
             render={props => {
               if (!auth.token) {
@@ -49,7 +64,7 @@ const App = ({logout, auth, setupSocket, chat}) => {
                 )
               } else {
                 return (
-                  <h1>Root</h1>
+                  <Messenger />
                 )
               }
             }}
