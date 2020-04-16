@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 const WebSocket = require('ws');
 var models = require('./server.js').models;
 
 const ws = new WebSocket.Server({port: 8080});
+const clients = [];
 
 ws.on('connection', (ws) => {
   function login(email, pass) {
@@ -19,6 +21,14 @@ ws.on('connection', (ws) => {
               error: err,
             }));
           } else {
+            console.log('ws: ', ws);
+            const userObject = {
+              id: user.id,
+              email: user.email,
+              ws: ws,
+            };
+            clients.push(userObject);
+            console.log('current clients: ', clients);
             ws.send(JSON.stringify({
               type: 'LOGGEDIN',
               data: {
@@ -55,6 +65,17 @@ ws.on('connection', (ws) => {
           });
         case 'LOGIN':
           login(parsed.data.email, parsed.data.password);
+        case 'SEARCH':
+          models.User.find({where: {email: {like: parsed.data}}}, (err2, users) => {
+            if (!err2 && users) {
+              ws.send(JSON.stringify({
+                type: 'GOT_USERS',
+                data: {
+                  users: users,
+                },
+              }));
+            }
+          });
         default:
           console.log('nothing to see here');
       }

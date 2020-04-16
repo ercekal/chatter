@@ -8,7 +8,7 @@ import Messenger from './components/pages/Messenger'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/css/swag.css'
 
-const App = ({logout, auth, setupSocket, chat}) => {
+const App = ({logout, setupSocket, token}) => {
 
   useEffect(() => {
     setupSocket()
@@ -24,7 +24,7 @@ const App = ({logout, auth, setupSocket, chat}) => {
           <Route
             path='/login'
             render={props => {
-              if(auth.token) {
+              if(token) {
                 return <Redirect to='/' />
               } else {
                 return <Auth />
@@ -34,7 +34,7 @@ const App = ({logout, auth, setupSocket, chat}) => {
           <Route
             path='/signup'
             render={props => {
-              if(auth.token) {
+              if(token) {
                 return <Redirect to='/' />
               } else {
                 return <Auth />
@@ -44,7 +44,7 @@ const App = ({logout, auth, setupSocket, chat}) => {
           <Route
             path='/:threadId'
             render={props => {
-              if (!auth.token) {
+              if (!token) {
                 return (
                   <Redirect to='/login' />
                 )
@@ -58,7 +58,7 @@ const App = ({logout, auth, setupSocket, chat}) => {
           <Route
             path='/'
             render={props => {
-              if (!auth.token) {
+              if (!token) {
                 return (
                   <Redirect to='/login' />
                 )
@@ -76,8 +76,8 @@ const App = ({logout, auth, setupSocket, chat}) => {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
-  chat: state.chat,
+  ...state.auth,
+  ...state.chat,
 })
 
 const mapDispatchToProps = dispatch => ({
