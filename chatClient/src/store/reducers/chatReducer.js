@@ -15,10 +15,15 @@ const chat = (state = defaultState, action) => {
         socket: action.payload
       }
     case 'GOT_USERS':
-    return {
-      ...state,
-      users: action.payload
-    }
+      return {
+        ...state,
+        users: action.payload
+      }
+    case 'ADD_THREAD':
+      return {
+        ...state,
+        threads: state.threads.concat(action.payload)
+      }
     default:
       return state
   }

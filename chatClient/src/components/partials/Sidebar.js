@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {connect, useStore} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
 
-const Sidebar = ({chat, users}) => {
+const Sidebar = ({chat, auth}) => {
   const [search, setSearch] = useState('')
   const onSearch = () => {
     chat.socket.send(JSON.stringify({
@@ -10,6 +10,15 @@ const Sidebar = ({chat, users}) => {
       data: search
     }))
   }
+
+  const findOrCreateThread = (id) => {
+    console.log('auth.user.id: ', auth.user.id);
+    chat.socket.send(JSON.stringify({
+      type: 'FIND_THREAD',
+      data: [auth.user.id, id]
+    }))
+  }
+
   return (
     <div className='sidebar'>
       <div className='search-container'>
@@ -26,46 +35,32 @@ const Sidebar = ({chat, users}) => {
       {search ?
       <ul className='thread-list'>
       <label>Results</label>
-      {chat.users.map(user =>
+      {chat.users.filter(u => u.id !== auth.user.id).map(user =>
         <li key={user.id}>
-        <Link to='/thread'>
+        <a onClick={e => {
+          e.preventDefault()
+          findOrCreateThread(user.id)
+        }}>
           <i className='zmdi zmdi-account-circle'/>
           <h5>{user.username}</h5>
           <p>{user.email}</p>
-        </Link>
+        </a>
       </li>)}
       </ul>
       :
       <ul className='thread-list'>
         <label>Messages</label>
-        <li>
-          <Link to='/thread'>
-            <i className='zmdi zmdi-account-circle'/>
-            <h5>Name</h5>
-            <p>this is the last message</p>
-          </Link>
-        </li>
-        <li>
-          <Link to='/thread'>
-            <i className='zmdi zmdi-account-circle'/>
-            <h5>Name</h5>
-            <p>this is the last message</p>
-          </Link>
-        </li>
-        <li>
-          <Link to='/thread'>
-            <i className='zmdi zmdi-account-circle'/>
-            <h5>Name</h5>
-            <p>this is the last message</p>
-          </Link>
-        </li>
-        <li>
-          <Link to='/thread'>
-            <i className='zmdi zmdi-account-circle'/>
-            <h5>Name</h5>
-            <p>this is the last message</p>
-          </Link>
-        </li>
+        {chat.threads.map((thread, i) => {
+          return (
+            <li key={i}>
+              <Link to='/thread'>
+                <i className='zmdi zmdi-account-circle'/>
+                <h5>Name</h5>
+                <p>this is the last message</p>
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     }
     </div>

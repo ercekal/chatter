@@ -21,7 +21,6 @@ ws.on('connection', (ws) => {
               error: err,
             }));
           } else {
-            console.log('ws: ', ws);
             const userObject = {
               id: user.id,
               email: user.email,
@@ -76,6 +75,41 @@ ws.on('connection', (ws) => {
               }));
             }
           });
+          break;
+        case 'FIND_THREAD':
+          models.Thread.findOne({where: {
+            and: [
+              {users: {like: parsed.data[0]}},
+              {users: {like: parsed.data[1]}},
+            ],
+          }}, (err, thread) => {
+            console.log('thread: ', thread);
+            if (!err && thread) {
+              ws.send(JSON.stringify({
+                type: 'ADD_THREAD',
+                data: thread,
+              }));
+            } else {
+              models.Thread.create({
+                lastUpdated: new Date(),
+                users: parsed.data,
+              }, (err2, thread) => {
+                console.log('err2: ', err2);
+                console.log('thread22222: ', thread);
+                if (!err2 && thread) {
+                  console.log('clients.filtersssss', clients.filter(u => thread.users.indexOf(u.id.toString()) > -1));
+                  clients.filter(u => thread.users.indexOf(u.id.toString()) > -1).map(client => {
+                    console.log('client: ', client);
+                    client.ws.send(JSON.stringify({
+                      type: 'ADD_THREAD',
+                      data: thread,
+                    }));
+                  });
+                }
+              });
+            }
+          });
+          break;
         default:
           console.log('nothing to see here');
       }
