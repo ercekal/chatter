@@ -7,10 +7,9 @@ const clients = [];
 
 ws.on('connection', (ws) => {
   function getInitialThreads(userId) {
-    models.Thread.find({where: {}}, (err, threads) => {
-      console.log('threads:222222 ', threads);
+    models.Thread.find({where: {}, include: 'Messages'}, (err, threads) => {
+      console.log('threads: ', threads);
       if (!err && threads) {
-        console.log('burasi: ');
         ws.send(JSON.stringify({
           type: 'INITIAL_THREADS',
           data: threads,
@@ -57,10 +56,18 @@ ws.on('connection', (ws) => {
 
   ws.on('close', (req) => {
     console.log('req: ', req);
+    let clientIndex = -1;
+    clients.map((c, i) => {
+      if (c.ws._closeCode === req) {
+        clientIndex = i;
+      }
+      if (clientIndex > -1) {
+        clients.splice(clientIndex, i);
+      }
+    });
   });
 
   ws.on('message', (message) => {
-    console.log('Got message', JSON.parse(message));
     let parsed = JSON.parse(message);
     if (parsed) {
       switch (parsed.type) {
@@ -128,12 +135,8 @@ ws.on('connection', (ws) => {
                 lastUpdated: new Date(),
                 users: parsed.data,
               }, (err2, thread) => {
-                console.log('err2: ', err2);
-                console.log('thread22222: ', thread);
                 if (!err2 && thread) {
-                  console.log('clients.filtersssss', clients.filter(u => thread.users.indexOf(u.id.toString()) > -1));
                   clients.filter(u => thread.users.indexOf(u.id.toString()) > -1).map(client => {
-                    console.log('client: ', client);
                     client.ws.send(JSON.stringify({
                       type: 'ADD_THREAD',
                       data: thread,
@@ -145,7 +148,22 @@ ws.on('connection', (ws) => {
           });
           break;
         case 'THREAD_LOAD':
-
+          // models.Message.find({where: {
+          //   threadId: parsed.data.threadId,
+          // },
+          //   order: 'date DESC',
+          //   skip: parsed.data.skip,
+          //   limit: 10,
+          // }, (err, messages) => {
+          //   if (!err && messages) {
+          //     ws.send(JSON.stringify({
+          //       type: 'GOT_MESSAGES',
+          //       threadId: parsed.data.threadId,
+          //       messages: messages,
+          //     }));
+          //   }
+          // });
+          break;
         default:
           console.log('nothing to see here');
       }

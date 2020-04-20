@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
 
 const ThreadView = ({match, chat}) => {
-  console.log('chat: ', chat);
   useEffect(() => {
     init()
   })
@@ -18,7 +17,6 @@ const ThreadView = ({match, chat}) => {
   const init = () => {
     let currentThread = chat.threads.filter(t => t.id === match.params.threadId)[0]
     if(currentThread) {
-      console.log('currentThread: ', currentThread);
       let skip = currentThread.Messages || 0;
       (chat.socket.readyState &&
       chat.socket.send(JSON.stringify({

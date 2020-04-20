@@ -47,6 +47,15 @@ export const setupSocket = (token, userId) => {
             payload: data.data
           })
           break;
+        case 'GOT_MESSAGES':
+          dispatch({
+            type: 'ADD_MESSAGES_TO_THREAD',
+            payload: {
+              threadId: data.threadId,
+              messages: data.messages
+            }
+          })
+          break;
         default:
           break;
       }

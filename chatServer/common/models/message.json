@@ -17,7 +17,18 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "Thread": {
+      "type": "belongsTo",
+      "model": "Thread",
+      "foreignKey": "threadId"
+    },
+    "User": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "userId"
+    }
+  },
   "acls": [],
   "methods": {}
 }
