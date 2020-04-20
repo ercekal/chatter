@@ -1,13 +1,23 @@
 import * as AuthActions from './authActions'
 
-export const setupSocket = () => {
+export const setupSocket = (token, userId) => {
   return dispatch => {
     const socket = new WebSocket('ws://localhost:8080')
     socket.onopen = () => {
-      dispatch({
-        type: 'SETUP_SOCKET',
-        payload: socket
-      })
+      if(token) {
+        socket.send(JSON.stringify({
+          type: 'CONNECT_WITH_TOKEN',
+          data: {
+            token: token,
+            userId: userId
+          }
+        }))
+      } else {
+        dispatch({
+          type: 'SETUP_SOCKET',
+          payload: socket
+        })
+      }
     }
     socket.onmessage = message => {
       console.log('message: ', message);

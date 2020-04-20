@@ -62,6 +62,10 @@ ws.on('connection', (ws) => {
               });
             }
           });
+        case 'CONNECT_WITH_TOKEN':
+          models.User.findById(parsed.data.userId, (err2, user) => {
+            console.log('user: ', user);
+          });
         case 'LOGIN':
           login(parsed.data.email, parsed.data.password);
         case 'SEARCH':
@@ -110,6 +114,8 @@ ws.on('connection', (ws) => {
             }
           });
           break;
+        case 'THREAD_LOAD':
+
         default:
           console.log('nothing to see here');
       }

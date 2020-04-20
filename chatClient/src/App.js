@@ -8,10 +8,9 @@ import Messenger from './components/pages/Messenger'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/css/swag.css'
 
-const App = ({logout, setupSocket, token}) => {
-
+const App = ({logout, setupSocket, token, user}) => {
   useEffect(() => {
-    setupSocket()
+    setupSocket(token, user.id)
   }, []);
 
   return (
@@ -81,8 +80,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setupSocket: () => {
-    dispatch(ChatActions.setupSocket())
+  setupSocket: (token, userId) => {
+    dispatch(ChatActions.setupSocket(token, userId))
   },
   logout: () => {
     dispatch(AuthActions.logout())

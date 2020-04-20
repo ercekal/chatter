@@ -13,6 +13,7 @@ const Sidebar = ({chat, auth}) => {
 
   const findOrCreateThread = (id) => {
     console.log('auth.user.id: ', auth.user.id);
+    console.log('chat.socket: ', chat.socket);
     chat.socket.send(JSON.stringify({
       type: 'FIND_THREAD',
       data: [auth.user.id, id]
@@ -53,9 +54,9 @@ const Sidebar = ({chat, auth}) => {
         {chat.threads.map((thread, i) => {
           return (
             <li key={i}>
-              <Link to='/thread'>
+              <Link to={`/${thread.id}`}>
                 <i className='zmdi zmdi-account-circle'/>
-                <h5>Name</h5>
+                <h5>{thread.id}</h5>
                 <p>this is the last message</p>
               </Link>
             </li>
