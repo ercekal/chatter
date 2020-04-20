@@ -12,6 +12,10 @@ export const setupSocket = (token, userId) => {
             userId: userId
           }
         }))
+        dispatch({
+          type: 'SETUP_SOCKET',
+          payload: socket
+        })
       } else {
         dispatch({
           type: 'SETUP_SOCKET',
@@ -33,10 +37,17 @@ export const setupSocket = (token, userId) => {
           })
           break;
         case 'ADD_THREAD':
-            dispatch({
-              type: 'ADD_THREAD',
-              payload: data.data
-            })
+          dispatch({
+            type: 'ADD_THREAD',
+            payload: data.data
+          })
+          break;
+        case 'INITIAL_THREADS':
+          dispatch({
+            type: 'INITIAL_THREADS',
+            payload: data.data
+          })
+          break;
         default:
           break;
       }
