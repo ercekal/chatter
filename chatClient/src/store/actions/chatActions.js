@@ -24,7 +24,6 @@ export const setupSocket = (token, userId) => {
       }
     }
     socket.onmessage = message => {
-      console.log('message: ', message);
       let data = JSON.parse(message.data)
       switch (data.type) {
         case 'LOGGEDIN':

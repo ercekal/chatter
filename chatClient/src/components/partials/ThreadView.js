@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
 
 const ThreadView = ({match, chat}) => {
+  console.log('chat: ', chat);
   useEffect(() => {
     init()
   })

@@ -51,6 +51,7 @@ const Sidebar = ({chat, auth}) => {
       :
       <ul className='thread-list'>
         <label>Messages</label>
+        {console.log('chat sidebar: ', chat)}
         {chat.threads.map((thread, i) => {
           return (
             <li key={i}>

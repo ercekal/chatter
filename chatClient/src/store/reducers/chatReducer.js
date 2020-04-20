@@ -8,6 +8,7 @@ const defaultState = {
 }
 
 const chat = (state = defaultState, action) => {
+  console.log('action: ', action);
   switch (action.type) {
     case 'SETUP_SOCKET':
       return {

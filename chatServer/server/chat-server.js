@@ -8,7 +8,9 @@ const clients = [];
 ws.on('connection', (ws) => {
   function getInitialThreads(userId) {
     models.Thread.find({where: {}}, (err, threads) => {
-      if (!err & threads) {
+      console.log('threads:222222 ', threads);
+      if (!err && threads) {
+        console.log('burasi: ');
         ws.send(JSON.stringify({
           type: 'INITIAL_THREADS',
           data: threads,
@@ -31,6 +33,7 @@ ws.on('connection', (ws) => {
               error: err,
             }));
           } else {
+            ws.uid = user.id + new Date().getTime().toString();
             const userObject = {
               id: user.id,
               email: user.email,
@@ -51,6 +54,11 @@ ws.on('connection', (ws) => {
       }
     });
   }
+
+  ws.on('close', (req) => {
+    console.log('req: ', req);
+  });
+
   ws.on('message', (message) => {
     console.log('Got message', JSON.parse(message));
     let parsed = JSON.parse(message);
@@ -76,6 +84,7 @@ ws.on('connection', (ws) => {
         case 'CONNECT_WITH_TOKEN':
           models.User.findById(parsed.data.userId, (err2, user) => {
             if (!err2 && user) {
+              ws.uid = user.id + new Date().getTime().toString();
               const userObject = {
                 id: user.id,
                 email: user.email,
