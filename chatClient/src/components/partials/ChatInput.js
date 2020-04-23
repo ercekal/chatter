@@ -12,7 +12,6 @@ const ChatInput = ({match, auth, chat, socket}) => {
       content: content,
       date: new Date()
     }
-    console.log('msg: ', msg);
     chat.socket.send(JSON.stringify({
       type: 'ADD_MESSAGE',
       data: {

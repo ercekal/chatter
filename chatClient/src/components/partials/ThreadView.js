@@ -40,15 +40,13 @@ const ThreadView = ({match, chat}) => {
 
   return (
     <div className='main-view'>
-      {console.log('chat.threads.filter(t => t.id === match.params.threadId): ', chat.threads.filter(t => t.id === match.params.threadId))}
       {chat.threads.filter(t => t.id === match.params.threadId).map((thread, i) => {
-        console.log('thread: ', thread);
         return (
           <div className='message-container' key={i}>
             {thread.Messages.map((msg, mi) => {
-              console.log('msg: ', msg);
-              return msg &&
+              return (
                 <Message msg={msg} key={mi} />
+              )
             })}
           </div>
           // <div>asdf</div>

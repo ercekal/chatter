@@ -162,10 +162,8 @@ ws.on('connection', (ws) => {
           break;
         case 'ADD_MESSAGE':
           models.Thread.findById(parsed.data.threadId, (err2, thread) => {
-            console.log('thread: ', thread);
             if (!err2 && thread) {
               models.Message.upsert(parsed.data, (err3, message) => {
-                console.log('parsed.data: upsert', parsed.data);
                 console.log('message: upsert', message);
                 if (!err3 && message) {
                   clients.filter(client => thread.users.includes(client.id.toString())).map(client => {

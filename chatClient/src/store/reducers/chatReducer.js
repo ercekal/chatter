@@ -46,13 +46,18 @@ const chat = (state = defaultState, action) => {
         })
       }
       case 'ADD_SINGLE_MESSAGE':
+        console.log('action.payload: msggg ', action.payload);
         return {
           ...state,
           threads: state.threads.map(thread => {
             if (thread.id === action.payload.threadId) {
+              console.log('thread.Messages.concat(action.payload.message): ', thread.Messages.concat(action.payload.messages));
+              const message = {
+                msg: action.payload.messages
+              }
               return {
                 ...thread,
-                Messages: thread.Messages.concat(action.payload.message)
+                Messages: thread.Messages.concat(message)
               }
             } else {
               return thread
