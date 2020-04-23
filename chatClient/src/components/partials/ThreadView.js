@@ -1,8 +1,10 @@
 import React, {useEffect, useRef} from 'react';
 import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
+import Message from './Message'
 
 const ThreadView = ({match, chat}) => {
+  console.log('chat: ', chat);
   useEffect(() => {
     init()
   }, [])
@@ -38,7 +40,21 @@ const ThreadView = ({match, chat}) => {
 
   return (
     <div className='main-view'>
-      hello
+      {console.log('chat.threads.filter(t => t.id === match.params.threadId): ', chat.threads.filter(t => t.id === match.params.threadId))}
+      {chat.threads.filter(t => t.id === match.params.threadId).map((thread, i) => {
+        console.log('thread: ', thread);
+        return (
+          <div className='message-container' key={i}>
+            {thread.Messages.map((msg, mi) => {
+              console.log('msg: ', msg);
+              // return (
+              //   <Message msg={msg} key={mi} />
+              // )
+            })}
+          </div>
+          // <div>asdf</div>
+        )
+      })}
     </div>
   );
 };

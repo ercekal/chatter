@@ -165,13 +165,14 @@ ws.on('connection', (ws) => {
             console.log('thread: ', thread);
             if (!err2 && thread) {
               models.Message.upsert(parsed.data, (err3, message) => {
-                console.log('message: ', message);
+                console.log('parsed.data: upsert', parsed.data);
+                console.log('message: upsert', message);
                 if (!err3 && message) {
                   clients.filter(client => thread.users.includes(client.id.toString())).map(client => {
                     client.ws.send(JSON.stringify({
                       type: 'ADD_MESSAGE_TO_THREAD',
                       threadId: parsed.data.threadId,
-                      message: message,
+                      message: message.msg,
                     }));
                   });
                 }
