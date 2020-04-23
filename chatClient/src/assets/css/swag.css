@@ -116,3 +116,25 @@ ul.thread-list label {
   border-radius: 18px;
   border: none;
 }
+
+.message-container {
+  width: calc(100vw - 300px);
+}
+.message-item {
+  padding: 10px;
+}
+.message-item.msg-right {
+  text-align: right;
+}
+
+.chat-bubble {
+  max-width: 600px;
+  display: inline-block;
+}
+
+.message-item .zmdi-account-circle {
+  float: left;
+}
+.message-item.msg-right .zmdi-account-circle {
+  float: left;
+}
