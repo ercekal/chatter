@@ -169,6 +169,7 @@ ws.on('connection', (ws) => {
                 console.log('message: upsert', message);
                 if (!err3 && message) {
                   clients.filter(client => thread.users.includes(client.id.toString())).map(client => {
+                    console.log('message add: ', message);
                     client.ws.send(JSON.stringify({
                       type: 'ADD_MESSAGE_TO_THREAD',
                       threadId: parsed.data.threadId,

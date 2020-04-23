@@ -57,7 +57,7 @@ export const setupSocket = (token, userId) => {
           })
           break;
         case 'ADD_MESSAGE_TO_THREAD':
-          console.log('data: ', data);
+          console.log('data: asdasda', data);
           dispatch({
             type: 'ADD_SINGLE_MESSAGE',
             payload: {

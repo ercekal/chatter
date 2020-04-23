@@ -47,9 +47,8 @@ const ThreadView = ({match, chat}) => {
           <div className='message-container' key={i}>
             {thread.Messages.map((msg, mi) => {
               console.log('msg: ', msg);
-              // return (
-              //   <Message msg={msg} key={mi} />
-              // )
+              return msg &&
+                <Message msg={msg} key={mi} />
             })}
           </div>
           // <div>asdf</div>
