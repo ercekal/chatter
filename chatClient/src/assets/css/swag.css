@@ -132,9 +132,10 @@ ul.thread-list label {
   display: inline-block;
 }
 
-.message-item .zmdi-account-circle {
+.message-item.msg-right .zmdi-account-circle {
   float: left;
 }
-.message-item.msg-right .zmdi-account-circle {
+
+.message-item .zmdi-account-circle {
   float: left;
 }
