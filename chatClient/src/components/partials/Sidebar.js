@@ -12,8 +12,6 @@ const Sidebar = ({chat, auth}) => {
   }
 
   const findOrCreateThread = (id) => {
-    console.log('auth.user.id: ', auth.user.id);
-    console.log('chat.socket: ', chat.socket);
     chat.socket.send(JSON.stringify({
       type: 'FIND_THREAD',
       data: [auth.user.id, id]
@@ -30,8 +28,8 @@ const Sidebar = ({chat, auth}) => {
           onChange={e => setSearch(e.target.value)}
           />
           <button
-          className='btn btn-primary'
-          onClick={onSearch}>Search</button>
+          className='btn btn-search'
+          onClick={onSearch}><i className='zmdi zmdi-search' /></button>
       </div>
       {search ?
       <ul className='thread-list'>
@@ -51,7 +49,6 @@ const Sidebar = ({chat, auth}) => {
       :
       <ul className='thread-list'>
         <label>Messages</label>
-        {console.log('chat sidebar: ', chat)}
         {chat.threads.map((thread, i) => {
           return (
             <li key={i}>

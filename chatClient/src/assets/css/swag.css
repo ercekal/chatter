@@ -17,6 +17,13 @@
   border-radius: 50px !important;
 }
 
+.btn .btn-send {
+  left: 300px;
+    width: 100%;
+    bottom: 0px;
+    border: none;
+}
+
 .sidebar {
   background: white;
   float: left;
@@ -81,6 +88,14 @@ ul.thread-list label {
   box-shadow: none;
 }
 
+.input-view-chat {
+  position: fixed;
+  left: 300px;
+  width: 65%;
+  bottom: 0px;
+  display: flex;
+}
+
 .form-control {
   border: none;
   border-radius: 0px;
@@ -88,4 +103,16 @@ ul.thread-list label {
   font-size: 14px;
   padding: 10px;
   height: auto;
+}
+
+.search-container {
+  display: flex;
+  border: 1px solid;
+  margin: 10px;
+  border-radius: 18px;
+}
+
+.search-container .form-control {
+  border-radius: 18px;
+  border: none;
 }

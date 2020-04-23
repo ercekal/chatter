@@ -8,7 +8,6 @@ const defaultState = {
 }
 
 const chat = (state = defaultState, action) => {
-  console.log('action: ', action);
   switch (action.type) {
     case 'SETUP_SOCKET':
       return {
@@ -46,6 +45,20 @@ const chat = (state = defaultState, action) => {
           }
         })
       }
+      case 'ADD_SINGLE_MESSAGE':
+        return {
+          ...state,
+          threads: state.threads.map(thread => {
+            if (thread.id === action.payload.threadId) {
+              return {
+                ...thread,
+                Messages: thread.Messages.concat(action.payload.message)
+              }
+            } else {
+              return thread
+            }
+          })
+        }
     default:
       return state
   }

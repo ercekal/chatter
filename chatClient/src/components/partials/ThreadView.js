@@ -5,7 +5,7 @@ import {withRouter, Link} from 'react-router-dom'
 const ThreadView = ({match, chat}) => {
   useEffect(() => {
     init()
-  })
+  }, [])
   function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
@@ -31,9 +31,9 @@ const ThreadView = ({match, chat}) => {
 
   const prevParams = usePrevious({match});
     useEffect(() => {
-        if(prevParams && (prevParams.match.params.threadId  !== match.params.threadId)) {
-          init()
-        }
+      if(prevParams && (prevParams.match.params.threadId  !== match.params.threadId)) {
+        init()
+      }
     }, [match])
 
   return (

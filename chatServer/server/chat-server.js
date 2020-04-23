@@ -8,7 +8,6 @@ const clients = [];
 ws.on('connection', (ws) => {
   function getInitialThreads(userId) {
     models.Thread.find({where: {}, include: 'Messages'}, (err, threads) => {
-      console.log('threads: ', threads);
       if (!err && threads) {
         ws.send(JSON.stringify({
           type: 'INITIAL_THREADS',
@@ -39,7 +38,6 @@ ws.on('connection', (ws) => {
               ws: ws,
             };
             clients.push(userObject);
-            console.log('current clients: ', clients);
             getInitialThreads(user.id);
             ws.send(JSON.stringify({
               type: 'LOGGEDIN',
@@ -55,7 +53,6 @@ ws.on('connection', (ws) => {
   }
 
   ws.on('close', (req) => {
-    console.log('req: ', req);
     let clientIndex = -1;
     clients.map((c, i) => {
       if (c.ws._closeCode === req) {
@@ -124,7 +121,6 @@ ws.on('connection', (ws) => {
               {users: {like: parsed.data[1]}},
             ],
           }}, (err, thread) => {
-            console.log('thread: ', thread);
             if (!err && thread) {
               ws.send(JSON.stringify({
                 type: 'ADD_THREAD',
@@ -148,21 +144,40 @@ ws.on('connection', (ws) => {
           });
           break;
         case 'THREAD_LOAD':
-          // models.Message.find({where: {
-          //   threadId: parsed.data.threadId,
-          // },
-          //   order: 'date DESC',
-          //   skip: parsed.data.skip,
-          //   limit: 10,
-          // }, (err, messages) => {
-          //   if (!err && messages) {
-          //     ws.send(JSON.stringify({
-          //       type: 'GOT_MESSAGES',
-          //       threadId: parsed.data.threadId,
-          //       messages: messages,
-          //     }));
-          //   }
-          // });
+          models.Message.find({where: {
+            threadId: parsed.data.threadId,
+          },
+            order: 'date DESC',
+            skip: parsed.data.skip,
+            limit: 10,
+          }, (err, messages) => {
+            if (!err && messages) {
+              ws.send(JSON.stringify({
+                type: 'GOT_MESSAGES',
+                threadId: parsed.data.threadId,
+                messages: messages,
+              }));
+            }
+          });
+          break;
+        case 'ADD_MESSAGE':
+          models.Thread.findById(parsed.data.threadId, (err2, thread) => {
+            console.log('thread: ', thread);
+            if (!err2 && thread) {
+              models.Message.upsert(parsed.data, (err3, message) => {
+                console.log('message: ', message);
+                if (!err3 && message) {
+                  clients.filter(client => thread.users.includes(client.id.toString())).map(client => {
+                    client.ws.send(JSON.stringify({
+                      type: 'ADD_MESSAGE_TO_THREAD',
+                      threadId: parsed.data.threadId,
+                      message: message,
+                    }));
+                  });
+                }
+              });
+            }
+          });
           break;
         default:
           console.log('nothing to see here');
